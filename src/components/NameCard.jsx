@@ -11,15 +11,25 @@ const NameCard = ({ item, onOpen, variant = 'default' }) => {
   const surfaceClass =
     'bg-white border-emerald-900/10 shadow-md shadow-emerald-900/5 hover:shadow-emerald-900/10 dark:bg-emerald-900/20 dark:border-emerald-100/10 dark:shadow-black/20'
 
-  const FavoriteButton = ({ className = '' }) => (
-    <button
-      aria-label="favorite"
-      onClick={(e) => { e.stopPropagation(); toggleFavorite(item) }}
-      className={`p-2 rounded-full transition-colors ${isFavorite(item) ? 'text-amber-600' : 'text-emerald-900/50 hover:text-emerald-900 dark:text-emerald-200/60 dark:hover:text-emerald-100'} ${className}`}
-    >
-      <Heart className={`w-5 h-5 ${isFavorite(item) ? 'fill-amber-500/20' : ''}`} />
-    </button>
-  )
+  const FavoriteButton = ({ className = '' }) => {
+    const active = isFavorite(item)
+    return (
+      <button
+        aria-label="favorite"
+        onClick={(e) => {
+          e.stopPropagation()
+          toggleFavorite(item)
+        }}
+        className={`p-2 rounded-full transition-colors ${
+          active
+            ? 'text-black dark:text-white'
+            : 'text-emerald-900/50 hover:text-emerald-900 dark:text-emerald-200/60 dark:hover:text-emerald-100'
+        } ${className}`}
+      >
+        <Heart className={`w-5 h-5 ${active ? 'fill-current' : ''}`} />
+      </button>
+    )
+  }
 
   const content = (
     <>
