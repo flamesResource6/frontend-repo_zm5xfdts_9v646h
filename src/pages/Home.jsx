@@ -17,7 +17,21 @@ const Home = () => {
       n.english_name.toLowerCase().includes(q) ||
       n.arabic_name.toLowerCase().includes(q) ||
       n.meaning.toLowerCase().includes(q)
-    ).slice(0, 6)
+    ).sort((a, b) => {
+      const aName = a.english_name.toLowerCase()
+      const bName = b.english_name.toLowerCase()
+      const aStarts = aName.startsWith(q)
+      const bStarts = bName.startsWith(q)
+      if (aStarts && !bStarts) return -1
+      if (!aStarts && bStarts) return 1
+      
+      const aHas = aName.includes(q)
+      const bHas = bName.includes(q)
+      if (aHas && !bHas) return -1
+      if (!aHas && bHas) return 1
+      
+      return 0
+    }).slice(0, 6)
   }, [query])
 
   const scrollByAmount = (dir) => {
@@ -48,7 +62,7 @@ const Home = () => {
 
           {results.length > 0 && (
             <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {results.map(r => <NameCard key={r.english_name} item={r} onOpen={() => {}} />)}
+              {results.map(r => <NameCard key={`${r.english_name}-${r.gender}`} item={r} onOpen={() => {}} />)}
             </div>
           )}
 
@@ -85,10 +99,10 @@ const Home = () => {
           <div className="mt-16 text-left">
             <h2 className="font-serif text-3xl text-emerald-900 dark:text-emerald-50 flex items-center gap-2"><Sparkles className="text-amber-600"/> Trending</h2>
             <div className="mt-4 relative">
-              <button onClick={() => scrollByAmount(-1)} aria-label="Scroll left" className="hidden md:flex absolute -left-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/80 dark:bg-emerald-900/60 backdrop-blur border border-emerald-900/10 dark:border-emerald-100/10 shadow grid place-items-center hover:scale-105 transition">
-                <ChevronLeft className="w-5 h-5"/>
+              <button onClick={() => scrollByAmount(-1)} aria-label="Scroll left" className="hidden md:flex absolute -left-5 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white/90 dark:bg-emerald-900/80 backdrop-blur border border-emerald-900/10 dark:border-emerald-100/10 shadow-lg grid place-items-center hover:scale-105 transition text-emerald-900 dark:text-emerald-50">
+                <ChevronLeft className="w-6 h-6"/>
               </button>
-              <div ref={scrollRef} className="overflow-x-auto pb-2">
+              <div ref={scrollRef} className="overflow-x-auto no-scrollbar py-4 px-1">
                 <div className="flex gap-4 min-w-max">
                   {trending.map(n => (
                     <div key={n.english_name} className="w-[220px]">
@@ -97,8 +111,8 @@ const Home = () => {
                   ))}
                 </div>
               </div>
-              <button onClick={() => scrollByAmount(1)} aria-label="Scroll right" className="hidden md:flex absolute -right-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/80 dark:bg-emerald-900/60 backdrop-blur border border-emerald-900/10 dark:border-emerald-100/10 shadow grid place-items-center hover:scale-105 transition">
-                <ChevronRight className="w-5 h-5"/>
+              <button onClick={() => scrollByAmount(1)} aria-label="Scroll right" className="hidden md:flex absolute -right-5 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white/90 dark:bg-emerald-900/80 backdrop-blur border border-emerald-900/10 dark:border-emerald-100/10 shadow-lg grid place-items-center hover:scale-105 transition text-emerald-900 dark:text-emerald-50">
+                <ChevronRight className="w-6 h-6"/>
               </button>
             </div>
           </div>

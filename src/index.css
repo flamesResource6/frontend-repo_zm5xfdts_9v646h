@@ -15,21 +15,85 @@
     background-color: #F9FAFB;
   }
 
-  .dark html { color: #ECFDF5; background-color: #0B1320; }
+  .dark html {
+    color: #ECFDF5;
+    background-color: #0B1320;
+  }
 
-  h1,h2,h3,h4,h5,h6,.font-serif { font-family: var(--font-serif); }
-  .font-\[Amiri\] { font-family: 'Amiri', serif; }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .font-serif {
+    font-family: var(--font-serif);
+  }
 
-  body { @apply antialiased; }
+  .font-\[Amiri\] {
+    font-family: 'Amiri', serif;
+  }
+
+  body {
+    @apply antialiased;
+  }
 }
 
 /* Subtle geometric watermark */
 .bg-pattern {
   position: relative;
 }
+
 .bg-pattern:before {
   content: '';
-  position: absolute; inset: 0; pointer-events: none; opacity: 0.05;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.05;
   background-image: radial-gradient(#064E3B 1px, transparent 1px);
   background-size: 24px 24px;
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgb(6 78 59 / 0.2);
+  /* emerald-900/20 */
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(6 78 59 / 0.4);
+  /* emerald-900/40 */
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background-color: rgb(209 250 229 / 0.2);
+  /* emerald-100/20 */
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(209 250 229 / 0.4);
+  /* emerald-100/40 */
 }
