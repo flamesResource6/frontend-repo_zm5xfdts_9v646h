@@ -4,6 +4,8 @@ import { VirtuosoGrid } from 'react-virtuoso'
 import { namesData, alpha } from '../data/namesData'
 import NameCard from '../components/NameCard'
 import NameDetailModal from '../components/NameDetailModal'
+import AuthModal from '../components/AuthModal'
+import { useFavorites } from '../context/FavoritesContext'
 
 function useQuery() {
   const { search } = useLocation()
@@ -16,6 +18,7 @@ const Browse = () => {
   const [letter, setLetter] = useState('All')
   const [pop, setPop] = useState('desc')
   const [open, setOpen] = useState(null)
+  const { showAuthModal, setShowAuthModal } = useFavorites()
 
   const filtered = useMemo(() => {
     let arr = [...namesData]
@@ -90,6 +93,7 @@ const Browse = () => {
       </div>
 
       {open && <NameDetailModal item={open} onClose={() => setOpen(null)} />}
+      {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
     </div>
   )
 }

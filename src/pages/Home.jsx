@@ -4,9 +4,12 @@ import { Search, Sparkles, Baby, BookOpen, ChevronLeft, ChevronRight } from 'luc
 import { motion } from 'framer-motion'
 import { namesData } from '../data/namesData'
 import NameCard from '../components/NameCard'
+import AuthModal from '../components/AuthModal'
+import { useFavorites } from '../context/FavoritesContext'
 
 const Home = () => {
   const [query, setQuery] = useState('')
+  const { showAuthModal, setShowAuthModal } = useFavorites()
   const trending = useMemo(() => [...namesData].sort(() => 0.5 - Math.random()).slice(0, 8), [])
   const scrollRef = useRef(null)
 
@@ -118,6 +121,7 @@ const Home = () => {
           </div>
         </div>
       </section>
+      {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
     </div>
   )
 }

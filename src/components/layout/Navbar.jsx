@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
-import { Menu, X, Heart, BookOpen, Sun, Moon } from 'lucide-react'
+import { Menu, X, Heart, BookOpen, Sun, Moon, User, LogOut } from 'lucide-react'
 import { useTheme } from '../../context/ThemeContext'
+import { useAuth } from '../../context/AuthContext'
+import AuthModal from '../AuthModal'
 
 const navLinkClass = ({ isActive }) =>
   `px-3 py-2 rounded-md text-sm font-medium transition-colors ${
@@ -10,7 +12,9 @@ const navLinkClass = ({ isActive }) =>
 
 const Navbar = () => {
   const [open, setOpen] = useState(false)
+  const [showAuthModal, setShowAuthModal] = useState(false)
   const { theme, toggleTheme } = useTheme()
+  const { user, signOut } = useAuth()
 
   return (
     <header className="sticky top-0 z-40">
@@ -35,6 +39,21 @@ const Navbar = () => {
               <button onClick={toggleTheme} aria-label="Toggle theme" className="hidden md:inline-flex p-2 rounded-md text-emerald-900 hover:bg-emerald-50 dark:text-emerald-100 dark:hover:bg-emerald-900/40">
                 {theme === 'dark' ? <Sun className="w-5 h-5"/> : <Moon className="w-5 h-5"/>}
               </button>
+              {user ? (
+                <>
+                  <NavLink to="/profile" className="hidden md:inline-flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium text-emerald-900 hover:bg-emerald-50 dark:text-emerald-100 dark:hover:bg-emerald-900/40">
+                    <User className="w-4 h-4" />
+                    Profile
+                  </NavLink>
+                  <button onClick={signOut} className="hidden md:inline-flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium text-emerald-900 hover:bg-emerald-50 dark:text-emerald-100 dark:hover:bg-emerald-900/40">
+                    <LogOut className="w-4 h-4" />
+                  </button>
+                </>
+              ) : (
+                <button onClick={() => setShowAuthModal(true)} className="hidden md:inline-flex px-4 py-2 rounded-md text-sm font-medium bg-emerald-900 text-white hover:bg-emerald-800 dark:bg-emerald-100 dark:text-emerald-900 dark:hover:bg-emerald-200">
+                  Sign In
+                </button>
+              )}
               <button onClick={() => setOpen(!open)} className="md:hidden p-2 rounded-md text-emerald-900 hover:bg-emerald-50 dark:text-emerald-100 dark:hover:bg-emerald-900/40">
                 {open ? <X/> : <Menu/>}
               </button>
@@ -53,11 +72,24 @@ const Navbar = () => {
                 <NavLink to="/browse" onClick={() => setOpen(false)} className={navLinkClass}>Browse</NavLink>
                 <NavLink to="/favorites" onClick={() => setOpen(false)} className={navLinkClass}><Heart className="w-4 h-4 mr-1 inline"/> Favorites</NavLink>
                 <NavLink to="/etiquette" onClick={() => setOpen(false)} className={navLinkClass}><BookOpen className="w-4 h-4 mr-1 inline"/> Naming Rules</NavLink>
+                {user ? (
+                  <>
+                    <NavLink to="/profile" onClick={() => setOpen(false)} className={navLinkClass}><User className="w-4 h-4 mr-1 inline"/> Profile</NavLink>
+                    <button onClick={() => { signOut(); setOpen(false); }} className="px-3 py-2 rounded-md text-sm font-medium text-left text-emerald-900/80 hover:text-emerald-900 hover:bg-emerald-50 dark:text-emerald-100/80 dark:hover:text-emerald-100 dark:hover:bg-emerald-900/30">
+                      <LogOut className="w-4 h-4 mr-1 inline"/> Sign Out
+                    </button>
+                  </>
+                ) : (
+                  <button onClick={() => { setShowAuthModal(true); setOpen(false); }} className="px-3 py-2 rounded-md text-sm font-medium text-left bg-emerald-900 text-white hover:bg-emerald-800 dark:bg-emerald-100 dark:text-emerald-900 dark:hover:bg-emerald-200">
+                    Sign In
+                  </button>
+                )}
               </div>
             </div>
           )}
         </nav>
       </div>
+      {showAuthModal && <AuthModal onClose={() => setShowAuthModal(false)} />}
     </header>
   )
 }
